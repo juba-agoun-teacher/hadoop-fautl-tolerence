@@ -10,7 +10,7 @@ services:
     user: root
     environment:
       - HADOOP_HOME=/opt/hadoop
-      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+      #- JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     ports:
       - "9870:9870"   # HDFS Web UI
       - "8088:8088"   # YARN ResourceManager UI
@@ -45,7 +45,7 @@ services:
     user: root
     environment:
       - HADOOP_HOME=/opt/hadoop
-      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+      #- JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     volumes:
       - datanode1_data:/opt/hadoop/data/dataNode
       - ./hadoop-config:/opt/hadoop/etc/hadoop
@@ -65,7 +65,7 @@ services:
     user: root
     environment:
       - HADOOP_HOME=/opt/hadoop
-      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+      #- JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     volumes:
       - datanode2_data:/opt/hadoop/data/dataNode
       - ./hadoop-config:/opt/hadoop/etc/hadoop
@@ -85,7 +85,7 @@ services:
     user: root
     environment:
       - HADOOP_HOME=/opt/hadoop
-      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+      #- JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     volumes:
       - datanode3_data:/opt/hadoop/data/dataNode
       - ./hadoop-config:/opt/hadoop/etc/hadoop
