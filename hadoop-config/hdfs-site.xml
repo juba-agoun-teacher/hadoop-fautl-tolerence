@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+  <!-- ── Réplication : 3 copies sur 3 DataNodes ── -->
+  <property>
+    <name>dfs.replication</name>
+    <value>3</value>
+    <description>Nombre de répliques de chaque bloc HDFS</description>
+  </property>
+
+  <!-- ── Taille de bloc par défaut : 128 Mo ── -->
+  <property>
+    <name>dfs.blocksize</name>
+    <value>134217728</value>
+    <description>Taille d'un bloc HDFS en octets (128 Mo)</description>
+  </property>
+
+  <!-- ── Chemins de stockage ── -->
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///opt/hadoop/data/nameNode</value>
+  </property>
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///opt/hadoop/data/dataNode</value>
+  </property>
+
+  <!-- ── Web UI accessible sans auth ── -->
+  <property>
+    <name>dfs.webhdfs.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>dfs.permissions.enabled</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>dfs.namenode.http-address</name>
+    <value>namenode:9870</value>
+  </property>
+
+</configuration>

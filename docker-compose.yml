@@ -1,0 +1,111 @@
+version: "3.8"
+
+services:
+
+  # ─── NameNode (Master) ───────────────────────────────────────────
+  namenode:
+    image: apache/hadoop:3.3.6
+    container_name: namenode
+    hostname: namenode
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    ports:
+      - "9870:9870"   # HDFS Web UI
+      - "8088:8088"   # YARN ResourceManager UI
+      - "9000:9000"   # HDFS IPC
+    volumes:
+      - namenode_data:/opt/hadoop/data/nameNode
+      - ./hadoop-config:/opt/hadoop/etc/hadoop
+      - ./scripts:/scripts
+      - ./data:/data
+      - ./mapreduce:/mapreduce
+    command: >
+      bash -c "
+        hdfs namenode -format -force 2>/dev/null | tail -5 &&
+        hdfs namenode &
+        yarn resourcemanager &
+        wait
+      "
+    networks:
+      hadoop_net:
+        ipv4_address: 172.20.0.2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9870"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ─── DataNode 1 ──────────────────────────────────────────────────
+  datanode1:
+    image: apache/hadoop:3.3.6
+    container_name: datanode1
+    hostname: datanode1
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    volumes:
+      - datanode1_data:/opt/hadoop/data/dataNode
+      - ./hadoop-config:/opt/hadoop/etc/hadoop
+    command: >
+      bash -c "sleep 15 && hdfs datanode & yarn nodemanager & wait"
+    depends_on:
+      - namenode
+    networks:
+      hadoop_net:
+        ipv4_address: 172.20.0.3
+
+  # ─── DataNode 2 ──────────────────────────────────────────────────
+  datanode2:
+    image: apache/hadoop:3.3.6
+    container_name: datanode2
+    hostname: datanode2
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    volumes:
+      - datanode2_data:/opt/hadoop/data/dataNode
+      - ./hadoop-config:/opt/hadoop/etc/hadoop
+    command: >
+      bash -c "sleep 15 && hdfs datanode & yarn nodemanager & wait"
+    depends_on:
+      - namenode
+    networks:
+      hadoop_net:
+        ipv4_address: 172.20.0.4
+
+  # ─── DataNode 3 ──────────────────────────────────────────────────
+  datanode3:
+    image: apache/hadoop:3.3.6
+    container_name: datanode3
+    hostname: datanode3
+    user: root
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+    volumes:
+      - datanode3_data:/opt/hadoop/data/dataNode
+      - ./hadoop-config:/opt/hadoop/etc/hadoop
+    command: >
+      bash -c "sleep 15 && hdfs datanode & yarn nodemanager & wait"
+    depends_on:
+      - namenode
+    networks:
+      hadoop_net:
+        ipv4_address: 172.20.0.5
+
+volumes:
+  namenode_data:
+  datanode1_data:
+  datanode2_data:
+  datanode3_data:
+
+networks:
+  hadoop_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
