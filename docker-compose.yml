@@ -1,8 +1,10 @@
+version: "3.8"
+
 services:
 
   # ─── NameNode (Master) ───────────────────────────────────────────
   namenode:
-    image: apache/hadoop:3.3.6
+    image: msfasha/hadoop-petra:mrjob
     container_name: namenode
     hostname: namenode
     user: root
@@ -21,37 +23,10 @@ services:
       - ./mapreduce:/mapreduce
     command: >
       bash -c "
-        # Installer les dépendances nécessaires
-        microdnf install -y wget tar gzip openssl-devel bzip2-devel libffi-devel zlib-devel &&
-        
-        # Télécharger Python depuis python.org
-        cd /tmp &&
-        wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz &&
-        tar -xzf Python-3.11.6.tgz &&
-        cd Python-3.11.6 &&
-        
-        # Compiler et installer
-        ./configure --prefix=/usr/local --enable-optimizations --with-ensurepip=install &&
-        make -j \$(nproc) &&
-        make altinstall &&
-        
-        # Créer les liens symboliques
-        ln -sf /usr/local/bin/python3.11 /usr/local/bin/python3 &&
-        ln -sf /usr/local/bin/python3.11 /usr/local/bin/python &&
-        ln -sf /usr/local/bin/pip3.11 /usr/local/bin/pip3 &&
-        ln -sf /usr/local/bin/pip3.11 /usr/local/bin/pip &&
-        
-        # Nettoyer
-        cd / && rm -rf /tmp/Python-3.11.6* &&
-        
-        # Vérifier l'installation
-        python3 --version &&
-        pip3 --version &&
-        
-        # Démarrer Hadoop
-        hdfs namenode -format -force 2>/dev/null | tail -5 &
+        hdfs namenode -format -force 2>/dev/null | tail -5 &&
         hdfs namenode &
         yarn resourcemanager &
+        wait
       "
     networks:
       hadoop_net:
@@ -64,7 +39,7 @@ services:
 
   # ─── DataNode 1 ──────────────────────────────────────────────────
   datanode1:
-    image: apache/hadoop:3.3.6
+    image: msfasha/hadoop-petra:mrjob
     container_name: datanode1
     hostname: datanode1
     user: root
@@ -84,7 +59,7 @@ services:
 
   # ─── DataNode 2 ──────────────────────────────────────────────────
   datanode2:
-    image: apache/hadoop:3.3.6
+    image: msfasha/hadoop-petra:mrjob
     container_name: datanode2
     hostname: datanode2
     user: root
@@ -104,7 +79,7 @@ services:
 
   # ─── DataNode 3 ──────────────────────────────────────────────────
   datanode3:
-    image: apache/hadoop:3.3.6
+    image: msfasha/hadoop-petra:mrjob
     container_name: datanode3
     hostname: datanode3
     user: root
