@@ -108,7 +108,7 @@ datanode3    Up
 Attendez environ **30 secondes** que le NameNode initialise HDFS, puis ouvrez les interfaces Web :
 
 - **HDFS Web UI** → http://localhost:9870
-- **YARN Web UI** → http://localhost:8088
+<!-- - **YARN Web UI** → http://localhost:8088 -->
 
 > 💡 Dans l'onglet *"Datanodes"* du HDFS Web UI, vous devez voir **3 nœuds actifs**.
 
